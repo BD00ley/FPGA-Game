@@ -1,24 +1,23 @@
+`timescale 1us/100ps
+
 module vga_tb();
-localparam half_wave = 12.5; //40 mhz clk
-localparam period = half_wave*2;
-localparam runtime = period * 1000;
-reg clk = 0;
-wire HSYNC_WIRE, VSYNC_WIRE;
+localparam period = 0.025; //40 mhz clk
+localparam runtime = (28*10**(3)); // 1 second
+reg clk = 1'b0;
+wire HSYNC_WIRE, VSYNC_WIRE, rdy_wire;
 initial
 begin
     $dumpfile("vga_tb.vcd");
-    $dumpvars(0, vga_tb);
-
-    # runtime $finish;
+    $dumpvars(0, UUT);
+    #runtime 
+    $finish;
 end
-VGA UUT (
+VGA_t UUT (
     .pxl_clk(clk),
     .rst(1'b0),
-    .red(),
-    .green(),
-    .blue(),
     .HSYNC(HSYNC_WIRE),
+    .rdy(rdy_wire),
     .VSYNC(VSYNC_WIRE));
 
-always #half_wave clk = !clk;
+always #(period/2) clk = !clk;
 endmodule

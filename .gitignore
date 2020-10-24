@@ -1,2 +1,3 @@
 tb/*.vcd
 tb/vga
+tb/*.out
