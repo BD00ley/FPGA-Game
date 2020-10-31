@@ -1,3 +1,5 @@
 tb/*.vcd
-tb/vga
 tb/*.out
+misc/*.bin
+.vscode
+misc/test.txt

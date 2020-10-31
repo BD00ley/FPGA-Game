@@ -1,5 +1,0 @@
--Put together makefile
--Properly Test VGA module
--Create top file
--Create method of controlling visuals with VGA
--PS2 keyboard input(?)
