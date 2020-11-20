@@ -20,8 +20,8 @@ localparam v_front_porch = v_visible+1;
 localparam v_sync_pulse = v_front_porch+4;
 localparam v_back_porch = v_sync_pulse+23;
 
-integer h_pxl_cnt = 0;
-integer v_line_cnt = 0;
+integer column = 0;
+integer row = 0;
 
 assign rdy = h_disp & v_disp;
 
@@ -33,14 +33,14 @@ begin
         h_disp <= 1'b0;
     end
     else begin
-        if(h_pxl_cnt >= 0 && h_pxl_cnt < h_visible-1) begin
+        if(column >= 0 && column < h_visible-1) begin
             HSYNC  <= 1'b1;
             h_disp <= 1'b1;
-        end else if (h_pxl_cnt >= h_visible-1 && h_pxl_cnt < h_front_porch-1)
+        end else if (column >= h_visible-1 && column < h_front_porch-1)
             h_disp <= 1'b0;
-        else if (h_pxl_cnt >= h_front_porch-1 && h_pxl_cnt < h_sync_pulse-1)
+        else if (column >= h_front_porch-1 && column < h_sync_pulse-1)
             HSYNC  <= 1'b0;
-        else if (h_pxl_cnt == h_back_porch-1)
+        else if (column == h_back_porch-1)
             h_disp <= 1'b1;
         else 
             HSYNC <= 1'b1;
@@ -55,16 +55,16 @@ begin
         v_disp <= 1'b0;
     end
     else begin
-        if(v_line_cnt >= 0 && v_line_cnt < v_visible-1) begin
+        if(row >= 0 && row < v_visible-1) begin
             VSYNC <= 1'b1;
             v_disp <= 1'b1;
-        end else if (v_line_cnt == v_visible-1 && h_pxl_cnt == h_back_porch-1)
+        end else if (row == v_visible-1 && column == h_back_porch-1)
             v_disp <= 1'b0;
-        else if (v_line_cnt == v_front_porch-1 && h_pxl_cnt == h_back_porch-1)
+        else if (row == v_front_porch-1 && column == h_back_porch-1)
             VSYNC <= 1'b0;
-        else if (v_line_cnt == v_sync_pulse-1 && h_pxl_cnt == h_back_porch-1)
+        else if (row == v_sync_pulse-1 && column == h_back_porch-1)
             VSYNC <= 1'b1;
-        else if (v_line_cnt == v_back_porch-1 && h_pxl_cnt == h_back_porch-1)
+        else if (row == v_back_porch-1 && column == h_back_porch-1)
             v_disp <= 1'b1;
     end
 end
@@ -73,22 +73,22 @@ end
 always @(posedge pxl_clk)
 begin
     if(rst == 1'b1)
-        v_line_cnt <= 0;
-    else if((v_line_cnt < v_back_porch-1) && (h_pxl_cnt == h_back_porch-1))
-        v_line_cnt <= v_line_cnt + 1;
-    else if (v_line_cnt == v_back_porch-1 && (h_pxl_cnt == h_back_porch-1))
-        v_line_cnt <= 0;
+        row <= 0;
+    else if((row < v_back_porch-1) && (column == h_back_porch-1))
+        row <= row + 1;
+    else if (row == v_back_porch-1 && (column == h_back_porch-1))
+        row <= 0;
 end
 
 //Horizontal pixel count
 always @(posedge pxl_clk)
 begin
     if(rst == 1'b1) 
-        h_pxl_cnt <= 0;
-    else if(h_pxl_cnt < h_back_porch-1)
-        h_pxl_cnt <= h_pxl_cnt + 1;
+        column <= 0;
+    else if(column < h_back_porch-1)
+        column <= column + 1;
     else
-        h_pxl_cnt <= 0;
+        column <= 0;
 end
 
 endmodule
