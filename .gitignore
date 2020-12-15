@@ -1,5 +1,8 @@
 tb/*.vcd
 tb/*.out
 misc/*.bin
+src/*.json
+src/*.asc
+src/*.bin
 .vscode
 misc/test.txt

@@ -15,7 +15,7 @@ wire flag;
 reg flag_latch = 1'b0;
 wire MOSI, SCK, CS_n;
 assign flag = (data_out == 8'b01001101) ? 1'b1 : 1'b0;
-assign MISO = (flag_latch == 1'b1) ? MISO_data[7] : 1'b1;
+assign MISO = (flag_latch == 1'b1) ? MISO_data[5] : 1'b1;
 initial
 begin
     $dumpfile("spi_tb.vcd");
@@ -29,10 +29,10 @@ end
 spi UUT (
     //Internal ports 
     .clk(clk),
-    .MOSI_data(8'b01001101),
+    .MOSI_data(MOSI_data),
     .CS_n_i(CS_n_i),
     .MISO_data(MISO_wire),
-    .rdy(rdy),
+    .rdy(1'b1),
 
     //SPI External ports
     .MISO(MISO),
