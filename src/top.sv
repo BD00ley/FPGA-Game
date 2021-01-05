@@ -12,7 +12,7 @@ wire lock;
 
 reg [7:0] test = 8'b00101010;
 reg [1:0] counter = 2'b00;
-
+reg [7:0] MISO_data;
 reg clk_reg = 1'b0;
 assign clk_pin = clk_reg;
 
@@ -21,6 +21,7 @@ assign clk_pin = clk_reg;
 //    .clock_in(clk),
 //    .clock_out(system_clk),
 //    .locked(lock));
+
 
 // Clock divider (lol) for my bad logic analyzer
 always @(posedge clk) begin

@@ -5,7 +5,7 @@ localparam period = 0.025; //40 mhz clk
 localparam runtime = 40; // 1 second
 localparam CS_n_fall = 40;
 reg clk = 1'b0;
-wire MOSI_data = 8'b11001101;
+wire[7:0] MOSI_data = 8'b11001101;
 reg[7:0] data_out = 8'b00000000;
 reg CS_n_i = 1'b1;
 reg[7:0] MISO_data = 8'b01100011;
@@ -14,8 +14,8 @@ wire MISO;
 wire flag;
 reg flag_latch = 1'b0;
 wire MOSI, SCK, CS_n;
-assign flag = (data_out == 8'b01001101) ? 1'b1 : 1'b0;
-assign MISO = (flag_latch == 1'b1) ? MISO_data[5] : 1'b1;
+assign flag = (data_out == 8'b11001101) ? 1'b1 : 1'b0;
+assign MISO = (flag_latch == 1'b1) ? MISO_data[7] : 1'b1;
 initial
 begin
     $dumpfile("spi_tb.vcd");
@@ -33,6 +33,7 @@ spi UUT (
     .CS_n_i(CS_n_i),
     .MISO_data(MISO_wire),
     .rdy(1'b1),
+    .loadData(),
 
     //SPI External ports
     .MISO(MISO),
@@ -49,7 +50,7 @@ always @(posedge SCK) begin
     end
 end
 
-always @(posedge flag) begin
+always @(posedge clk) begin
     if(flag == 1'b1)
         flag_latch <= 1'b1; 
 end
